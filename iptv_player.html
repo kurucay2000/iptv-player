@@ -1,61 +1,41 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<title>IPTV Player</title>
-<link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
-<style>
-  body { margin: 0; padding: 0; background: black; }
-  #player { width: 100%; height: 100vh; }
-</style>
+  <meta charset="UTF-8" />
+  <title>IPTV Player</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-<video
-  id="player"
-  class="video-js vjs-default-skin"
-  controls
-  preload="auto"
-  width="100%"
-  height="100%"
-></video>
+  <video id="video" controls autoplay></video>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-<script>
-  var player = videojs('player');
+  <script>
+    const video = document.getElementById('video');
+    const params = new URLSearchParams(window.location.search);
+    const streamUrl = params.get("url");
 
-  function playStream(url) {
-    if (Hls.isSupported()) {
-      var hls = new Hls();
-      hls.loadSource(url);
-      hls.attachMedia(player.tech_.el_);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        player.play();
-      });
-    } else if (player.tech_.el_.canPlayType('application/vnd.apple.mpegurl')) {
-      player.src({ src: url, type: 'application/vnd.apple.mpegurl' });
-      player.play();
+    if (!streamUrl) {
+      alert("IPTV yayını URL'si verilmedi.");
+    } else if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(streamUrl);
+      hls.attachMedia(video);
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = streamUrl;
     } else {
-      alert('Tarayıcınız HLS formatını desteklemiyor.');
+      alert("Tarayıcı bu yayını desteklemiyor.");
     }
-  }
-
-  // FileMaker’dan gelen URL parametresi ile başlatma
-  function getUrlParameter(name) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results = regex.exec(window.location.href);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-
-  var streamUrl = getUrlParameter('url');
-  if (streamUrl) {
-    playStream(streamUrl);
-  } else {
-    alert('IPTV yayını URL\'si verilmedi.');
-  }
-</script>
+  </script>
 </body>
 </html>
