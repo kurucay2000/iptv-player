@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      width: 32px;
+      height: 32px;
+      transition: transform 0.2s ease, filter 0.3s ease;
+      cursor: pointer;
+    }
+    img:hover {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 5px gold);
+    }
+    img:active {
+      transform: scale(0.95);
+      filter: drop-shadow(0 0 10px yellow);
+    }
+  </style>
+</head>
+<body>
+  <img id="star" src="" alt="star" />
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const src = params.get("url");
+    document.getElementById("star").src = src;
+  </script>
+</body>
+</html>
