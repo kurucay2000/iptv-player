@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPTV Player</title>
+  <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet" />
+  <script src="https://unpkg.com/video.js/dist/video.js"></script>
+  <style>
+    body { margin:0; background:#000; }
+    #my_video { width:100%; height:100vh; }
+  </style>
+</head>
+<body>
+  <video id="my_video" class="video-js vjs-big-play-centered" controls autoplay></video>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const streamUrl = urlParams.get("url");
+
+    if (streamUrl) {
+      const player = videojs("my_video");
+      player.src({ src: streamUrl, type: "application/x-mpegURL" });
+    }
+  </script>
+</body>
+</html>
